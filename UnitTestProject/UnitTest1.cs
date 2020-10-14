@@ -3,7 +3,7 @@ using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wincolmem;
 
-namespace UnitTestProject
+namespace UnitTestFront
 {
     [TestClass]
     public class UnitTest1

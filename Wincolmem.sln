@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.28307.1145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wincolmem", "Wincolmem\Wincolmem.csproj", "{4D6954E3-8D81-49B1-A30C-39181FE17D56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{0869F4FE-FAAA-46C1-9D1B-6C4CCCE3406B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestFront", "UnitTestProject\UnitTestFront.csproj", "{0869F4FE-FAAA-46C1-9D1B-6C4CCCE3406B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game\Game.csproj", "{19477E41-50A0-4499-8C93-3EB451CDE7EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestBack", "UnitTestBack\UnitTestBack.csproj", "{64F23A28-81DE-4CEC-B105-5FE17BC30D99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{0869F4FE-FAAA-46C1-9D1B-6C4CCCE3406B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0869F4FE-FAAA-46C1-9D1B-6C4CCCE3406B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0869F4FE-FAAA-46C1-9D1B-6C4CCCE3406B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19477E41-50A0-4499-8C93-3EB451CDE7EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19477E41-50A0-4499-8C93-3EB451CDE7EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19477E41-50A0-4499-8C93-3EB451CDE7EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19477E41-50A0-4499-8C93-3EB451CDE7EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64F23A28-81DE-4CEC-B105-5FE17BC30D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64F23A28-81DE-4CEC-B105-5FE17BC30D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64F23A28-81DE-4CEC-B105-5FE17BC30D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64F23A28-81DE-4CEC-B105-5FE17BC30D99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

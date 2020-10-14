@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.MemoryLabel = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
             this.HiScoresButton = new System.Windows.Forms.Button();
@@ -38,6 +39,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // MemoryLabel
@@ -66,7 +68,7 @@
             this.HiScoresButton.Name = "HiScoresButton";
             this.HiScoresButton.Size = new System.Drawing.Size(122, 40);
             this.HiScoresButton.TabIndex = 2;
-            this.HiScoresButton.Text = "Hi Scores";
+            this.HiScoresButton.Text = "Hi-Score";
             this.HiScoresButton.UseVisualStyleBackColor = true;
             // 
             // QuitButton
@@ -152,10 +154,16 @@
             this.label2.Text = "o";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // mainMenuTimer
+            // 
+            this.mainMenuTimer.Enabled = true;
+            this.mainMenuTimer.Tick += new System.EventHandler(this.mainMenuTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(317, 450);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
@@ -168,19 +176,13 @@
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.MemoryLabel);
             this.ForeColor = System.Drawing.Color.Black;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Colour Memory for Windows";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
-
-
-            this.components = new System.ComponentModel.Container();
-            this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
-
-            this.mainMenuTimer.Enabled = true;
-            this.mainMenuTimer.Tick += new System.EventHandler(this.mainMenuTimer_Tick);
-
-
 
         }
 
