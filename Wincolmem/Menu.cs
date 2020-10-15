@@ -26,7 +26,6 @@ namespace Wincolmem
             mainMenuTimer.Start();
         }
        
-
         private void mainMenuTimer_Tick(object sender, System.EventArgs e)
         {
             if (mainMenuAnimation)
@@ -88,8 +87,7 @@ namespace Wincolmem
             CreateLabelForLevel(level);
             CreateLabelForScore();
             InitializeTimeLabel(game.GetLevel(level).timeInSecs);
-
-
+            placeCards(game.GetLevelMap(level), dimension);
         }
 
         private void ResizeFormForLevel(int dimension)
@@ -132,6 +130,23 @@ namespace Wincolmem
             this.timeLabel.Visible = true;
         }
 
+        private void placeCards (Color[,] map, int dimension)
+        {
+            for(int i = 0; i < dimension; i++)
+            {
+                for(int j = 0; j < dimension; j++)
+                {
+                    createCard(i, j, width, dimension, map[i, j]);
+                }
+            }    
+        }
+
+        private void createCard(int posX, int posY, int boardWidth, int dimension, Color colour)
+        {
+            Card card = new Card(posX, posY, width, dimension, colour);
+            this.Controls.Add(card);
+        }
+
         private void ResizeFormForMainMenu()
         {
             width = 337;
@@ -167,6 +182,6 @@ namespace Wincolmem
             QuitButton.Show();
             mainMenuTimer.Start();
         }
-
+    
     }
 }
