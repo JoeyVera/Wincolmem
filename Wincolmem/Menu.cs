@@ -1,6 +1,7 @@
 ﻿using Game;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Wincolmem
@@ -12,6 +13,9 @@ namespace Wincolmem
         private Timer onGameTimer = new Timer();
         private static int score = 0;
         private static int width = 337;
+        private static Card card1clicked = null;
+        private static Card card2clicked = null;
+        private static int levelScore;
 
         public Menu()
         {
@@ -83,6 +87,7 @@ namespace Wincolmem
         private void StartLevel(int level, ColMem game)
         {
             int dimension = game.GetLevel(level).dimension;
+            levelScore = game.GetLevel(level).points;
             ResizeFormForLevel(dimension);
             CreateLabelForLevel(level);
             CreateLabelForScore();
@@ -112,6 +117,7 @@ namespace Wincolmem
         private void CreateLabelForScore()
         {
             Label scoreLabel = new Label();
+            scoreLabel.Name = "scoreLabel";
             scoreLabel.Text = score.ToString();
             scoreLabel.Top = 1;
             scoreLabel.Left =  width -30 - (score.ToString().Length * 16); //16 is the font size
@@ -143,8 +149,37 @@ namespace Wincolmem
 
         private void createCard(int posX, int posY, int boardWidth, int dimension, Color colour)
         {
-            Card card = new Card(posX, posY, width, dimension, colour);
+            Card card = new Card(posX, posY, width, dimension, colour, this);
+            card.Name = "card" + posX.ToString() + posY.ToString();
             this.Controls.Add(card);
+        }
+
+        public void updateScore(bool Success)
+        {
+            if (Success)
+                score = score + levelScore;
+            else
+                score = score - (levelScore / 4); //Is the selection is wrong there is a 25% of penalty
+
+            Label label = (Label)this.Controls.Find("scoreLabel", true).FirstOrDefault();
+            label.Left = width - 30 - (score.ToString().Length * 16);
+            label.Text = score.ToString();
+        }
+
+        public bool MoreClicks()
+        {
+            if (card2clicked == null)
+                return true;
+            else
+                return false;
+        }
+
+        public void NotifyCardClicked(Card clickedCard)
+        {
+            if (card1clicked == null)
+                card1clicked = clickedCard;
+            else
+                card2clicked = clickedCard;
         }
 
         private void ResizeFormForMainMenu()
