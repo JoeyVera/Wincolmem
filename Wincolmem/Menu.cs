@@ -9,6 +9,7 @@ namespace Wincolmem
     {
         public static bool mainMenuAnimation;
         private Timer mainMenuTimer = new Timer();
+        private Timer onGameTimer = new Timer();
         private static int score = 0;
         private static int width = 337;
 
@@ -21,6 +22,7 @@ namespace Wincolmem
         {
             mainMenuAnimation = true;
             mainMenuTimer.Interval = 800;
+            onGameTimer.Interval = 1000;
             mainMenuTimer.Start();
         }
        
@@ -85,6 +87,7 @@ namespace Wincolmem
             ResizeFormForLevel(dimension);
             CreateLabelForLevel(level);
             CreateLabelForScore();
+            InitializeTimeLabel(game.GetLevel(level).timeInSecs);
 
 
         }
@@ -121,6 +124,13 @@ namespace Wincolmem
             this.Controls.Add(scoreLabel);
         }
 
+        private void InitializeTimeLabel(int seconds)
+        {
+            var span = new TimeSpan(0, 0, seconds);
+            this.timeLabel.Text = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
+            this.timeLabel.Left = (width / 2) - 35;
+            this.timeLabel.Visible = true;
+        }
 
         private void ResizeFormForMainMenu()
         {
