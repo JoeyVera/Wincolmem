@@ -1,6 +1,6 @@
 ﻿namespace Wincolmem
 {
-    partial class Form1
+    partial class Menu
     {
         /// <summary>
         /// Required designer variable.
@@ -40,6 +40,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
+            this.timeLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MemoryLabel
@@ -60,6 +61,7 @@
             this.StartButton.TabIndex = 1;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // HiScoresButton
             // 
@@ -80,6 +82,7 @@
             this.QuitButton.TabIndex = 3;
             this.QuitButton.Text = "Quit";
             this.QuitButton.UseVisualStyleBackColor = true;
+            this.QuitButton.Click += new System.EventHandler(this.QuitButton_Click);
             // 
             // label1
             // 
@@ -159,12 +162,25 @@
             this.mainMenuTimer.Enabled = true;
             this.mainMenuTimer.Tick += new System.EventHandler(this.mainMenuTimer_Tick);
             // 
-            // Form1
+            // timeLabel
+            // 
+            this.timeLabel.AutoSize = true;
+            this.timeLabel.Font = new System.Drawing.Font("Debussy", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLabel.Location = new System.Drawing.Point(125, 1);
+            this.timeLabel.Name = "timeLabel";
+            this.timeLabel.Size = new System.Drawing.Size(78, 24);
+            this.timeLabel.TabIndex = 11;
+            this.timeLabel.Text = "00:00";
+            this.timeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.timeLabel.Visible = false;
+            // 
+            // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(317, 450);
+            this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -179,10 +195,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Menu";
             this.Text = "Colour Memory for Windows";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -198,9 +215,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
-
-
-
+        private System.Windows.Forms.Label timeLabel;
     }
 }
 

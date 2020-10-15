@@ -13,11 +13,9 @@ namespace Game
         public int timeInSecs;
     }
 
-
-
     public class ColMem
     {
-        public static Level[] levels { get; private set; }
+        private static Level[] levels;
         private static Color[] arrayOfColours;
         private static Color[,] map;        
 
@@ -48,6 +46,11 @@ namespace Game
             levels[1] = new Level() { number = 1, colours = 2, dimension = 4, points = 20, timeInSecs = 20 };
             levels[2] = new Level() { number = 2, colours = 4, dimension = 4, points = 30, timeInSecs = 30 };
             levels[3] = new Level() { number = 3, colours = 8, dimension = 4, points = 40, timeInSecs = 40 };
+        }
+
+        public Level GetLevel(int level)
+        {
+            return levels[level];
         }
 
         public Color[,] GetLevelMap(int level)
@@ -85,10 +88,12 @@ namespace Game
         }
     }
 
+    
     static class MyExtensions
     {
         private static Random rng = new Random();
 
+        // I borrowed this method from stack overflow
         public static void Shuffle<T>(this IList<T> list)
         {
             int n = list.Count;

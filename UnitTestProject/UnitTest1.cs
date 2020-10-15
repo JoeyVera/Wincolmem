@@ -12,7 +12,7 @@ namespace UnitTestFront
         public void TestChangeColour()
         {
             Color testColour = Color.FromName("Red");
-            testColour = Form1.ChangeColour(testColour);
+            testColour = Menu.ChangeColour(testColour);
             Assert.AreEqual("Green", testColour.Name);
         }
     }
