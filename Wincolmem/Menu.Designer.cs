@@ -41,6 +41,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
             this.timeLabel = new System.Windows.Forms.Label();
+            this.levelLabel = new System.Windows.Forms.Label();
+            this.scoreLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MemoryLabel
@@ -174,12 +176,38 @@
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.timeLabel.Visible = false;
             // 
+            // levelLabel
+            // 
+            this.levelLabel.AutoSize = true;
+            this.levelLabel.Font = new System.Drawing.Font("Debussy", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.levelLabel.Location = new System.Drawing.Point(12, 1);
+            this.levelLabel.Name = "levelLabel";
+            this.levelLabel.Size = new System.Drawing.Size(69, 24);
+            this.levelLabel.TabIndex = 12;
+            this.levelLabel.Text = "Level";
+            this.levelLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.levelLabel.Visible = false;
+            // 
+            // scoreLabel
+            // 
+            this.scoreLabel.AutoSize = true;
+            this.scoreLabel.Font = new System.Drawing.Font("Debussy", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Location = new System.Drawing.Point(236, 1);
+            this.scoreLabel.Name = "scoreLabel";
+            this.scoreLabel.Size = new System.Drawing.Size(75, 24);
+            this.scoreLabel.TabIndex = 13;
+            this.scoreLabel.Text = "Score";
+            this.scoreLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.scoreLabel.Visible = false;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(317, 450);
+            this.Controls.Add(this.scoreLabel);
+            this.Controls.Add(this.levelLabel);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
@@ -216,6 +244,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.Label levelLabel;
+        private System.Windows.Forms.Label scoreLabel;
     }
 }
 

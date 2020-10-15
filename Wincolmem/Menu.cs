@@ -15,7 +15,11 @@ namespace Wincolmem
         private static int width = 337;
         private static Card card1clicked = null;
         private static Card card2clicked = null;
+        private bool removeCards = false;
         private static int levelScore;
+        private int cardsLeft = -1;
+        private int currentLevel = 0;
+        private ColMem game;
 
         public Menu()
         {
@@ -74,9 +78,9 @@ namespace Wincolmem
         private void StartButton_Click(object sender, EventArgs e)
         {
             HideMainMenu();
-            ColMem game = new ColMem();
+            game = new ColMem();
             score = 0;
-            StartLevel(0, game);
+            StartLevel(0);
         }
 
         private void QuitButton_Click(object sender, EventArgs e)
@@ -84,13 +88,14 @@ namespace Wincolmem
             Application.Exit();
         }
 
-        private void StartLevel(int level, ColMem game)
+        private void StartLevel(int level)
         {
             int dimension = game.GetLevel(level).dimension;
+            cardsLeft = dimension * dimension;
             levelScore = game.GetLevel(level).points;
             ResizeFormForLevel(dimension);
-            CreateLabelForLevel(level);
-            CreateLabelForScore();
+            UpdateLabelForLevel(level);
+            UpdateLabelForScore();
             InitializeTimeLabel(game.GetLevel(level).timeInSecs);
             placeCards(game.GetLevelMap(level), dimension);
         }
@@ -102,21 +107,19 @@ namespace Wincolmem
             this.Height = (dimension * 98) + 100;        
         }
 
-        private void CreateLabelForLevel(int level)
+        private void UpdateLabelForLevel(int level)
         {
-            Label levelLabel = new Label();
             levelLabel.Text = "LEVEL " + level.ToString();
             levelLabel.Top = 1;
             levelLabel.Left = 1;
             levelLabel.Font = new Font("Debussy", 16);
             levelLabel.ForeColor = Color.Black;
             levelLabel.AutoSize = true;
-            this.Controls.Add(levelLabel);
+            levelLabel.Visible = true;
         }
 
-        private void CreateLabelForScore()
+        private void UpdateLabelForScore()
         {
-            Label scoreLabel = new Label();
             scoreLabel.Name = "scoreLabel";
             scoreLabel.Text = score.ToString();
             scoreLabel.Top = 1;
@@ -125,15 +128,15 @@ namespace Wincolmem
             scoreLabel.Font = new Font("Debussy", 16);
             scoreLabel.ForeColor = Color.Black;
             scoreLabel.AutoSize = true;
-            this.Controls.Add(scoreLabel);
+            scoreLabel.Visible = true;
         }
 
         private void InitializeTimeLabel(int seconds)
         {
             var span = new TimeSpan(0, 0, seconds);
-            this.timeLabel.Text = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-            this.timeLabel.Left = (width / 2) - 35;
-            this.timeLabel.Visible = true;
+            timeLabel.Text = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
+            timeLabel.Left = (width / 2) - 35;
+            timeLabel.Visible = true;
         }
 
         private void placeCards (Color[,] map, int dimension)
@@ -179,7 +182,52 @@ namespace Wincolmem
             if (card1clicked == null)
                 card1clicked = clickedCard;
             else
+            {
                 card2clicked = clickedCard;
+                checkIfCardsAreSameColour();
+            }
+        }
+
+        private void checkIfCardsAreSameColour()
+        {
+            if (card1clicked.BackColor == card2clicked.BackColor)
+            {
+                updateScore(true);
+                removeCards = true;
+                removeMatchedCards(); //TODO: move this to timer tick and add 2 secs of delay.
+            }
+            else
+                updateScore(false);
+        }
+
+        private void removeMatchedCards()
+        {
+            card1clicked.Dispose();
+            card1clicked = null;
+            card2clicked.Dispose();
+            card2clicked = null;
+            cardsLeft = cardsLeft - 2;
+            if (cardsLeft == 0)
+                levelComplete();
+        }
+
+        private void levelComplete()
+        {
+            if (currentLevel < 4)
+            {
+                currentLevel = currentLevel + 1;
+                StartLevel(currentLevel);
+            }
+            else
+                gameEnding();
+        }
+
+        private void gameEnding()
+        {
+            game = null;
+            //TODO
+            // ending screen
+            // back to the main menu
         }
 
         private void ResizeFormForMainMenu()
