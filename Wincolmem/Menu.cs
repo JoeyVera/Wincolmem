@@ -20,6 +20,7 @@ namespace Wincolmem
         private int cardsLeft = -1;
         private int currentLevel = 0;
         private ColMem game;
+        private int levelSecondsLeft;
 
         public Menu()
         {
@@ -32,8 +33,8 @@ namespace Wincolmem
             mainMenuTimer.Interval = 800;
             onGameTimer.Interval = 1000;
             mainMenuTimer.Start();
-        }
-       
+        }           
+
         private void mainMenuTimer_Tick(object sender, System.EventArgs e)
         {
             if (mainMenuAnimation)
@@ -96,8 +97,11 @@ namespace Wincolmem
             ResizeFormForLevel(dimension);
             UpdateLabelForLevel(level);
             UpdateLabelForScore();
-            InitializeTimeLabel(game.GetLevel(level).timeInSecs);
+            levelSecondsLeft = game.GetLevel(level).timeInSecs;
+            UpdateTimeLabel();
             placeCards(game.GetLevelMap(level), dimension);
+            onGameTimer.Enabled = true;
+            onGameTimer.Start();
         }
 
         private void ResizeFormForLevel(int dimension)
@@ -131,12 +135,16 @@ namespace Wincolmem
             scoreLabel.Visible = true;
         }
 
-        private void InitializeTimeLabel(int seconds)
+        private void UpdateTimeLabel()
         {
-            var span = new TimeSpan(0, 0, seconds);
+            var span = new TimeSpan(0, 0, levelSecondsLeft);
             timeLabel.Text = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
             timeLabel.Left = (width / 2) - 35;
-            timeLabel.Visible = true;
+            if (levelSecondsLeft < 11)
+                timeLabel.ForeColor = Color.Red;
+            else
+                timeLabel.ForeColor = Color.Black;
+            timeLabel.Visible = true;            
         }
 
         private void placeCards (Color[,] map, int dimension)
@@ -216,6 +224,7 @@ namespace Wincolmem
             if (currentLevel < 4)
             {
                 currentLevel = currentLevel + 1;
+                onGameTimer.Stop();
                 StartLevel(currentLevel);
             }
             else
@@ -228,6 +237,23 @@ namespace Wincolmem
             //TODO
             // ending screen
             // back to the main menu
+        }
+
+        private void onGameTimer_Tick(object sender, System.EventArgs e)
+        {
+            levelSecondsLeft--;
+            if (levelSecondsLeft < 0)
+                gameOver();
+            else
+            {
+                UpdateTimeLabel();
+                //TODO: add rest of actions
+            }
+        }
+
+        private void gameOver()
+        {
+            //TODO: add game over screen
         }
 
         private void ResizeFormForMainMenu()

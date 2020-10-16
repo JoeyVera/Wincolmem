@@ -85,6 +85,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\backSide.JPG" />
+    <None Include="Resources\gameEnd.png" />
+    <None Include="Resources\gameOver.gif" />
+    <None Include="Resources\failT.png" />
+    <None Include="Resources\okT.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Game\Game.csproj">

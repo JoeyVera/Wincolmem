@@ -40,6 +40,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
+            this.onGameTimer = new System.Windows.Forms.Timer(this.components);
             this.timeLabel = new System.Windows.Forms.Label();
             this.levelLabel = new System.Windows.Forms.Label();
             this.scoreLabel = new System.Windows.Forms.Label();
@@ -163,6 +164,11 @@
             // 
             this.mainMenuTimer.Enabled = true;
             this.mainMenuTimer.Tick += new System.EventHandler(this.mainMenuTimer_Tick);
+            // 
+            // onGameTimer
+            // 
+            
+            this.onGameTimer.Tick += new System.EventHandler(this.onGameTimer_Tick);
             // 
             // timeLabel
             // 
