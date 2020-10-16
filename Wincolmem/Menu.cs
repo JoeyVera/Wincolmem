@@ -24,19 +24,23 @@ namespace Wincolmem
         private int currentLevel = 0;
         private ColMem game;
         private int levelSecondsLeft;
+        private int levelDimension;
+        private int GameOverScreenTimerHold = -1;
+        private int EndGameScreenTimerHold = -1;
+        private bool GameEnded = false;
 
         public Menu()
         {
             InitializeComponent();
         }
-          
+
         private void Form1_Load(object sender, EventArgs e)
         {
             mainMenuAnimation = true;
             mainMenuTimer.Interval = 800;
             onGameTimer.Interval = 1000;
             mainMenuTimer.Start();
-        }           
+        }
 
         private void mainMenuTimer_Tick(object sender, System.EventArgs e)
         {
@@ -84,6 +88,7 @@ namespace Wincolmem
             HideMainMenu();
             game = new ColMem();
             score = 0;
+            GameEnded = false;
             StartLevel(0);
         }
 
@@ -94,24 +99,24 @@ namespace Wincolmem
 
         private void StartLevel(int level)
         {
-            int dimension = game.GetLevel(level).dimension;
-            cardsLeft = dimension * dimension;
+            levelDimension = game.GetLevel(level).dimension;
+            cardsLeft = levelDimension * levelDimension;
             levelScore = game.GetLevel(level).points;
-            ResizeFormForLevel(dimension);
+            ResizeFormForLevel();
             UpdateLabelForLevel(level);
             UpdateLabelForScore();
             levelSecondsLeft = game.GetLevel(level).timeInSecs;
             UpdateTimeLabel();
-            placeCards(game.GetLevelMap(level), dimension);
+            placeCards(game.GetLevelMap(level));
             onGameTimer.Enabled = true;
             onGameTimer.Start();
         }
 
-        private void ResizeFormForLevel(int dimension)
+        private void ResizeFormForLevel()
         {
-            width = (dimension * 80) + (400 / dimension);
+            width = (levelDimension * 80) + (400 / levelDimension);
             this.Width = width;
-            this.Height = (dimension * 98) + 100;        
+            this.Height = (levelDimension * 98) + 100;
         }
 
         private void UpdateLabelForLevel(int level)
@@ -130,7 +135,7 @@ namespace Wincolmem
             scoreLabel.Name = "scoreLabel";
             scoreLabel.Text = score.ToString();
             scoreLabel.Top = 1;
-            scoreLabel.Left =  width -30 - (score.ToString().Length * 16); //16 is the font size
+            scoreLabel.Left = width - 30 - (score.ToString().Length * 16); //16 is the font size
             scoreLabel.TextAlign = ContentAlignment.TopRight;
             scoreLabel.Font = new Font("Debussy", 16);
             scoreLabel.ForeColor = Color.Black;
@@ -147,23 +152,23 @@ namespace Wincolmem
                 timeLabel.ForeColor = Color.Red;
             else
                 timeLabel.ForeColor = Color.Black;
-            timeLabel.Visible = true;            
+            timeLabel.Visible = true;
         }
 
-        private void placeCards (Color[,] map, int dimension)
+        private void placeCards(Color[,] map)
         {
-            for(int i = 0; i < dimension; i++)
+            for (int i = 0; i < levelDimension; i++)
             {
-                for(int j = 0; j < dimension; j++)
+                for (int j = 0; j < levelDimension; j++)
                 {
-                    createCard(i, j, width, dimension, map[i, j]);
+                    createCard(i, j, width, map[i, j]);
                 }
-            }    
+            }
         }
 
-        private void createCard(int posX, int posY, int boardWidth, int dimension, Color colour)
+        private void createCard(int posX, int posY, int boardWidth, Color colour)
         {
-            Card card = new Card(posX, posY, width, dimension, colour, this);
+            Card card = new Card(posX, posY, width, levelDimension, colour, this);
             card.Name = "card" + posX.ToString() + posY.ToString();
             this.Controls.Add(card);
         }
@@ -239,6 +244,7 @@ namespace Wincolmem
         private void gameEnding()
         {
             game = null;
+            GetRidOfInGameStuff();
             //TODO
             // ending screen
             // back to the main menu
@@ -246,58 +252,155 @@ namespace Wincolmem
 
         private void onGameTimer_Tick(object sender, System.EventArgs e)
         {
-            levelSecondsLeft--;
-            if (levelSecondsLeft < 0)
-                gameOver();
+            
+            if (!GameEnded)
+            {
+                levelSecondsLeft--;
+
+                if (levelSecondsLeft < 0)
+                    gameOver();
+                else
+                {
+                    UpdateTimeLabel();
+                    if (removeCards)
+                    {
+                        if (showResultBeforeRemove)
+                        {
+                            removeMatchedCards();
+                            removeCards = false;
+                            showResultBeforeRemove = false;
+                        }
+                        else
+                        {
+                            card1clicked.Matched();
+                            card2clicked.Matched();
+                            showResultBeforeRemove = true;
+                        }
+                    }
+
+                    if (wrongChoice)
+                    {
+                        if (flipCards)
+                        {
+                            card1clicked.FlipCard();
+                            card2clicked.FlipCard();
+                            wrongChoice = false;
+                            flipCards = false;
+                            removeCards = false;
+                            card1clicked = null;
+                            card2clicked = null;
+                        }
+                        else
+                        {
+                            card1clicked.NoMatched();
+                            card2clicked.NoMatched();
+                            flipCards = true;
+                        }
+                    }
+                }
+            }
+
             else
             {
-                UpdateTimeLabel();
-                if (removeCards)
+                if (GameOverScreenTimerHold >= 0)
                 {
-                    if (showResultBeforeRemove)
+                    GameOverScreenTimerHold++;
+                    if (GameOverScreenTimerHold == 5)
                     {
-                        removeMatchedCards();
-                        removeCards = false;
-                        showResultBeforeRemove = false;
-                    }
-                    else
-                    {
-                        card1clicked.Matched();
-                        card2clicked.Matched();
-                        showResultBeforeRemove = true;
+                        GameOverScreenTimerHold = -1;
+                        RemoveGameOverScreen();
+                        onGameTimer.Stop();
+                        ResizeFormForMainMenu();
+                        ShowMainMenu();
                     }
                 }
 
-                if (wrongChoice)
+                //TODO: Add same rutine for EndGame
+
+            }
+
+        }
+
+        private void gameOver()
+        {
+            GameEnded = true;
+            game = null;
+            GetRidOfInGameStuff();
+            GameOverScreenTimerHold = 0;
+            ShowGameOverScreeen();
+        }           
+
+        private void ShowGameOverScreeen()
+        {
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Image = Properties.Resources.gameOver;
+            this.Height = 500;
+            this.Width = 500;
+
+            pictureBox.Height = 500;
+            pictureBox.Width = 500;
+            
+            pictureBox.Left = 1;
+            pictureBox.Top = 1;
+            pictureBox.Name = "GameOverPicture";
+
+            Label label = new Label();
+            label.Text = "GAME OVER";
+            label.Top = 20;
+            label.Left = 30;
+            label.Font = new Font("Debussy", 50);
+            label.ForeColor = Color.Black;
+            label.AutoSize = true;
+            label.Visible = true;
+            label.BackColor = Color.White;
+            label.Name = "GameOverLabel";
+
+            this.Controls.Add(pictureBox);
+            this.Controls.Add(label);
+            label.BringToFront();
+            pictureBox.SendToBack();
+        }
+
+        private void RemoveGameOverScreen()
+        {
+            Label label = (Label)this.Controls.Find("GameOverLabel" , true).FirstOrDefault();
+            label.Dispose();
+            label = null;
+
+            PictureBox pictureBox = (PictureBox)this.Controls.Find("GameOverPicture", true).FirstOrDefault();
+            pictureBox.Dispose();
+            pictureBox = null;
+        }
+
+        private void GetRidOfInGameStuff()
+        {            
+            levelLabel.Visible = false;
+            scoreLabel.Visible = false;
+            timeLabel.Visible = false;
+            GetRidOfRemainingCards();
+        }
+
+        private void GetRidOfRemainingCards()
+        {
+            Card remainingCard = null;
+
+            for (int i = (levelDimension) -1; i >= 0; i--)
+            {
+                for (int j = (levelDimension) - 1; j >= 0; j--)
                 {
-                    if (flipCards)
+                    remainingCard = (Card)this.Controls.Find("card" + i.ToString() + j.ToString(), true).FirstOrDefault();
+                    if(remainingCard != null)
                     {
-                        card1clicked.FlipCard();
-                        card2clicked.FlipCard();
-                        wrongChoice = false;
-                        flipCards = false;
-                        removeCards = false;
-                        card1clicked = null;
-                        card2clicked = null;
-                    }
-                    else
-                    {
-                        card1clicked.NoMatched();
-                        card2clicked.NoMatched();
-                        flipCards = true;
+                        remainingCard.Dispose();
+                        remainingCard = null;
                     }
                 }
             }
         }
 
-        private void gameOver()
-        {
-            //TODO: add game over screen
-        }
-
         private void ResizeFormForMainMenu()
         {
-            width = 337;
+            this.Width = 337;
             this.Height = 493;
         }
 
@@ -317,7 +420,8 @@ namespace Wincolmem
         }
 
         private void ShowMainMenu()
-        {            
+        {
+            
             label1.Show();
             label2.Show();
             label3.Show();
