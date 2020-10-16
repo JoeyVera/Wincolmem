@@ -16,6 +16,9 @@ namespace Wincolmem
         private static Card card1clicked = null;
         private static Card card2clicked = null;
         private bool removeCards = false;
+        private bool showResultBeforeRemove = false;
+        private bool wrongChoice = false;
+        private bool flipCards = false;
         private static int levelScore;
         private int cardsLeft = -1;
         private int currentLevel = 0;
@@ -202,10 +205,12 @@ namespace Wincolmem
             {
                 updateScore(true);
                 removeCards = true;
-                removeMatchedCards(); //TODO: move this to timer tick and add 2 secs of delay.
             }
             else
+            {
                 updateScore(false);
+                wrongChoice = true;
+            }
         }
 
         private void removeMatchedCards()
@@ -247,7 +252,41 @@ namespace Wincolmem
             else
             {
                 UpdateTimeLabel();
-                //TODO: add rest of actions
+                if (removeCards)
+                {
+                    if (showResultBeforeRemove)
+                    {
+                        removeMatchedCards();
+                        removeCards = false;
+                        showResultBeforeRemove = false;
+                    }
+                    else
+                    {
+                        card1clicked.Matched();
+                        card2clicked.Matched();
+                        showResultBeforeRemove = true;
+                    }
+                }
+
+                if (wrongChoice)
+                {
+                    if (flipCards)
+                    {
+                        card1clicked.FlipCard();
+                        card2clicked.FlipCard();
+                        wrongChoice = false;
+                        flipCards = false;
+                        removeCards = false;
+                        card1clicked = null;
+                        card2clicked = null;
+                    }
+                    else
+                    {
+                        card1clicked.NoMatched();
+                        card2clicked.NoMatched();
+                        flipCards = true;
+                    }
+                }
             }
         }
 

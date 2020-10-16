@@ -6,7 +6,6 @@ namespace Game
 {
     public struct Level
     {
-        public int number;
         public int colours;
         public int dimension;
         public int points;
@@ -42,10 +41,10 @@ namespace Game
         {
             levels = new Level[4];
 
-            levels[0] = new Level() { number = 0, colours = 2, dimension = 2, points = 10, timeInSecs = 10 };
-            levels[1] = new Level() { number = 1, colours = 2, dimension = 4, points = 20, timeInSecs = 20 };
-            levels[2] = new Level() { number = 2, colours = 4, dimension = 4, points = 30, timeInSecs = 30 };
-            levels[3] = new Level() { number = 3, colours = 8, dimension = 4, points = 40, timeInSecs = 40 };
+            levels[0] = new Level() { colours = 2, dimension = 2, points = 10, timeInSecs = 10 };
+            levels[1] = new Level() { colours = 2, dimension = 4, points = 20, timeInSecs = 28 };
+            levels[2] = new Level() { colours = 4, dimension = 4, points = 30, timeInSecs = 50 };
+            levels[3] = new Level() { colours = 8, dimension = 4, points = 40, timeInSecs = 75 };
         }
 
         public Level GetLevel(int level)
@@ -87,7 +86,6 @@ namespace Game
             return listOfCards;
         }
     }
-
     
     static class MyExtensions
     {

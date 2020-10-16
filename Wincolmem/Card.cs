@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Wincolmem
@@ -12,6 +8,7 @@ namespace Wincolmem
     {
         private Color cardColour;
         private Menu form;
+        private bool IamClicked = false;
 
         public Card(int posX, int posY, int boardWidth, int dimension, Color colour, Menu injectedForm)
         {
@@ -27,17 +24,30 @@ namespace Wincolmem
 
         protected override void OnClick(EventArgs e)
         {
-            if (form.MoreClicks())
+            if (form.MoreClicks() && !IamClicked)
             {
                 base.OnClick(e);
                 this.BackColor = cardColour;
                 this.Image = null;
                 form.NotifyCardClicked(this);
-
-
-
-                form.updateScore(true); //TODO: Remove this and apply correctly.
+                IamClicked = true;
             }
+        }
+
+        public void FlipCard()
+        {
+            this.Image = Properties.Resources.backSide;
+            IamClicked = false;
+        }
+
+        public void Matched()
+        {
+            this.Image = Properties.Resources.okT;
+        }
+
+        public void NoMatched()
+        {
+            this.Image = Properties.Resources.failT;
         }
 
     }
