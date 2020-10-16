@@ -334,28 +334,31 @@ namespace Wincolmem
                     GameOverScreenTimerHold++;
                     if (GameOverScreenTimerHold == 5)
                     {
-                        GameOverScreenTimerHold = -1;
-                        RemoveGameOverScreen();
+                        GameOverScreenTimerHold = -1;                        
                         onGameTimer.Stop();
+                        onGameTimer.Enabled = false;
+                        SaveIfHighScore();
+                        RemoveGameOverScreen();
                         ResizeFormForMainMenu();
                         ShowMainMenu();
                     }
                 }
-
 
                 if (EndGameScreenTimerHold >= 0)
                 {
                     EndGameScreenTimerHold++;
                     if (EndGameScreenTimerHold == 5)
                     {
-                        EndGameScreenTimerHold = -1;
-                        RemoveEndGameScreen();
+                        EndGameScreenTimerHold = -1;                        
                         onGameTimer.Stop();
+                        onGameTimer.Enabled = false;                        
+                        SaveIfHighScore();
+                        RemoveEndGameScreen();
                         ResizeFormForMainMenu();
                         ShowMainMenu();
                     }
                 }
-
+                
             }
         }
 
@@ -460,6 +463,8 @@ namespace Wincolmem
         private void ShowMainMenu()
         {
             HiScoreScreenActivated = false;
+            pointsText.Visible = false;
+            nameText.Visible = false;
             label4.Text = "o";
             label3.Text = "l";
             label2.Text = "o";
@@ -473,6 +478,7 @@ namespace Wincolmem
             label6.Show();
             MemoryLabel.Show();
             StartButton.Show();
+            HiScoresButton.Text = "Hi-Score";
             HiScoresButton.Show();
             QuitButton.Show();
             mainMenuTimer.Start();
@@ -494,8 +500,17 @@ namespace Wincolmem
             MemoryLabel.SendToBack();
             MemoryLabel.Text = "Scores";
 
+            pointsText.Text = "";
+            nameText.Text = "";
 
-            //TODO : show high scores list
+            foreach (HighScore hs in highscorelist)
+            {
+                pointsText.Text = pointsText.Text + hs.points.ToString() + "\r\n";
+                nameText.Text = nameText.Text + hs.name.ToString().ToUpper() + "\r\n";
+            }            
+
+            pointsText.Visible = true;
+            nameText.Visible = true;
         }
 
         private void HiScoresButton_Click(object sender, EventArgs e)
@@ -504,6 +519,42 @@ namespace Wincolmem
                 ShowMainMenu();
             else
                 ShowHighScores();
+        }
+
+        private void SaveIfHighScore()
+        {
+            if (score > highscorelist.GetLowerScore())
+            {
+                string nameInserted = Prompt.ShowDialog("PLEASE ENTER YOUR NAME", "GOT A HIGH SCORE!!!");
+                highscorelist.AddHighScore(new HighScore { points = score, name = nameInserted });
+                highscorelist.SaveHighScores();
+            }
+        }
+    }
+
+    //borrowed from stack overflow
+    public static class Prompt
+    {
+        public static string ShowDialog(string text, string caption)
+        {
+            Form prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = caption,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
+            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
     }
 }

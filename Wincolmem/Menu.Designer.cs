@@ -44,6 +44,8 @@
             this.levelLabel = new System.Windows.Forms.Label();
             this.scoreLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.pointsText = new System.Windows.Forms.TextBox();
+            this.nameText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // MemoryLabel
@@ -209,6 +211,35 @@
             this.label2.Text = "o";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // pointsText
+            // 
+            this.pointsText.BackColor = System.Drawing.SystemColors.Control;
+            this.pointsText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.pointsText.Enabled = false;
+            this.pointsText.Font = new System.Drawing.Font("Debussy", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pointsText.Location = new System.Drawing.Point(49, 162);
+            this.pointsText.Multiline = true;
+            this.pointsText.Name = "pointsText";
+            this.pointsText.Size = new System.Drawing.Size(95, 116);
+            this.pointsText.TabIndex = 16;
+            this.pointsText.Text = "pointsText";
+            this.pointsText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.pointsText.Visible = false;
+            // 
+            // nameText
+            // 
+            this.nameText.BackColor = System.Drawing.SystemColors.Control;
+            this.nameText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nameText.Enabled = false;
+            this.nameText.Font = new System.Drawing.Font("Debussy", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nameText.Location = new System.Drawing.Point(172, 162);
+            this.nameText.Multiline = true;
+            this.nameText.Name = "nameText";
+            this.nameText.Size = new System.Drawing.Size(95, 116);
+            this.nameText.TabIndex = 17;
+            this.nameText.Text = "nameText";
+            this.nameText.Visible = false;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -228,6 +259,8 @@
             this.Controls.Add(this.HiScoresButton);
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.MemoryLabel);
+            this.Controls.Add(this.pointsText);
+            this.Controls.Add(this.nameText);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -255,6 +288,8 @@
         private System.Windows.Forms.Label levelLabel;
         private System.Windows.Forms.Label scoreLabel;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox pointsText;
+        private System.Windows.Forms.TextBox nameText;
     }
 }
 

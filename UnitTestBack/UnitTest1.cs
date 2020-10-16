@@ -3,7 +3,7 @@ using System.Drawing;
 using Game;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTestBack
+namespace UnitTestGame
 {
     [TestClass]
     public class UnitTest1
