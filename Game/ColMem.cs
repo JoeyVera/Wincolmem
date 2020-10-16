@@ -41,7 +41,7 @@ namespace Game
         {
             levels = new Level[4];
 
-            levels[0] = new Level() { colours = 2, dimension = 2, points = 10, timeInSecs = 1 };
+            levels[0] = new Level() { colours = 2, dimension = 2, points = 10, timeInSecs = 10 };
             levels[1] = new Level() { colours = 2, dimension = 4, points = 20, timeInSecs = 28 };
             levels[2] = new Level() { colours = 4, dimension = 4, points = 30, timeInSecs = 50 };
             levels[3] = new Level() { colours = 8, dimension = 4, points = 40, timeInSecs = 75 };
@@ -50,6 +50,11 @@ namespace Game
         public Level GetLevel(int level)
         {
             return levels[level];
+        }
+
+        public int TotalNumberOfLevels()
+        {
+            return levels.Length;
         }
 
         public Color[,] GetLevelMap(int level)

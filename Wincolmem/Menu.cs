@@ -231,7 +231,7 @@ namespace Wincolmem
 
         private void levelComplete()
         {
-            if (currentLevel < 4)
+            if (currentLevel < 0)// game.TotalNumberOfLevels() -1)  //TODO: remove this comment
             {
                 currentLevel = currentLevel + 1;
                 onGameTimer.Stop();
@@ -243,11 +243,35 @@ namespace Wincolmem
 
         private void gameEnding()
         {
+            GameEnded = true;
             game = null;
             GetRidOfInGameStuff();
-            //TODO
-            // ending screen
-            // back to the main menu
+            EndGameScreenTimerHold = 0;
+            ShowEndGameScreeen();
+        }
+
+        private void ShowEndGameScreeen()
+        {
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Image = Properties.Resources.gameEnd;
+            this.Height = 370;
+            this.Width = 500;
+
+            pictureBox.Height = 370;
+            pictureBox.Width = 500;
+
+            pictureBox.Left = 1;
+            pictureBox.Top = 1;
+            pictureBox.Name = "GameEndPicture";
+
+            this.Controls.Add(pictureBox);
+        }
+
+        private void RemoveEndGameScreen()
+        {
+            PictureBox pictureBox = (PictureBox)this.Controls.Find("GameEndPicture", true).FirstOrDefault();
+            pictureBox.Dispose();
+            pictureBox = null;
         }
 
         private void onGameTimer_Tick(object sender, System.EventArgs e)
@@ -315,10 +339,21 @@ namespace Wincolmem
                     }
                 }
 
-                //TODO: Add same rutine for EndGame
+
+                if (EndGameScreenTimerHold >= 0)
+                {
+                    EndGameScreenTimerHold++;
+                    if (EndGameScreenTimerHold == 5)
+                    {
+                        EndGameScreenTimerHold = -1;
+                        RemoveEndGameScreen();
+                        onGameTimer.Stop();
+                        ResizeFormForMainMenu();
+                        ShowMainMenu();
+                    }
+                }
 
             }
-
         }
 
         private void gameOver()
