@@ -38,20 +38,22 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.mainMenuTimer = new System.Windows.Forms.Timer(this.components);
             this.onGameTimer = new System.Windows.Forms.Timer(this.components);
             this.timeLabel = new System.Windows.Forms.Label();
             this.levelLabel = new System.Windows.Forms.Label();
             this.scoreLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MemoryLabel
             // 
+            this.MemoryLabel.BackColor = System.Drawing.Color.Transparent;
             this.MemoryLabel.Font = new System.Drawing.Font("Debussy", 39.75F);
             this.MemoryLabel.Location = new System.Drawing.Point(38, 88);
+            this.MemoryLabel.Margin = new System.Windows.Forms.Padding(0);
             this.MemoryLabel.Name = "MemoryLabel";
-            this.MemoryLabel.Size = new System.Drawing.Size(242, 64);
+            this.MemoryLabel.Size = new System.Drawing.Size(242, 65);
             this.MemoryLabel.TabIndex = 0;
             this.MemoryLabel.Text = "Memory";
             // 
@@ -75,6 +77,7 @@
             this.HiScoresButton.TabIndex = 2;
             this.HiScoresButton.Text = "Hi-Score";
             this.HiScoresButton.UseVisualStyleBackColor = true;
+            this.HiScoresButton.Click += new System.EventHandler(this.HiScoresButton_Click);
             // 
             // QuitButton
             // 
@@ -148,18 +151,6 @@
             this.label6.Text = "r";
             this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Debussy", 39.75F);
-            this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(150, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 56);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "o";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // mainMenuTimer
             // 
             this.mainMenuTimer.Enabled = true;
@@ -167,7 +158,6 @@
             // 
             // onGameTimer
             // 
-            
             this.onGameTimer.Tick += new System.EventHandler(this.onGameTimer_Tick);
             // 
             // timeLabel
@@ -206,16 +196,29 @@
             this.scoreLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.scoreLabel.Visible = false;
             // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Debussy", 39.75F);
+            this.label2.ForeColor = System.Drawing.Color.Blue;
+            this.label2.Location = new System.Drawing.Point(150, 37);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 56);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "o";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(317, 450);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.scoreLabel);
             this.Controls.Add(this.levelLabel);
             this.Controls.Add(this.timeLabel);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label6);
@@ -248,10 +251,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label timeLabel;
         private System.Windows.Forms.Label levelLabel;
         private System.Windows.Forms.Label scoreLabel;
+        private System.Windows.Forms.Label label2;
     }
 }
 

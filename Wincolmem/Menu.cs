@@ -28,6 +28,8 @@ namespace Wincolmem
         private int GameOverScreenTimerHold = -1;
         private int EndGameScreenTimerHold = -1;
         private bool GameEnded = false;
+        private bool HiScoreScreenActivated = false;
+        private HighScores highscorelist;
 
         public Menu()
         {
@@ -39,6 +41,7 @@ namespace Wincolmem
             mainMenuAnimation = true;
             mainMenuTimer.Interval = 800;
             onGameTimer.Interval = 1000;
+            highscorelist = new HighScores();
             mainMenuTimer.Start();
         }
 
@@ -456,7 +459,12 @@ namespace Wincolmem
 
         private void ShowMainMenu()
         {
-            
+            HiScoreScreenActivated = false;
+            label4.Text = "o";
+            label3.Text = "l";
+            label2.Text = "o";
+            label5.Text = "u";
+            MemoryLabel.Text = "Memory";
             label1.Show();
             label2.Show();
             label3.Show();
@@ -470,5 +478,32 @@ namespace Wincolmem
             mainMenuTimer.Start();
         }
     
+        private void ShowHighScores()
+        {
+            StartButton.Hide();
+            HiScoresButton.Text = "Return";
+            HiScoreScreenActivated = true;
+            label1.Hide();
+            label6.Hide();
+            label4.Text = "H";
+            label3.Text = "i";
+            label2.Text = "g";
+            label5.Text = "h";
+            MemoryLabel.Left = 60;
+            label2.BringToFront();
+            MemoryLabel.SendToBack();
+            MemoryLabel.Text = "Scores";
+
+
+            //TODO : show high scores list
+        }
+
+        private void HiScoresButton_Click(object sender, EventArgs e)
+        {
+            if (HiScoreScreenActivated)
+                ShowMainMenu();
+            else
+                ShowHighScores();
+        }
     }
 }
