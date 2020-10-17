@@ -43,8 +43,8 @@ namespace Game
 
             levels[0] = new Level() { colours = 2, dimension = 2, points = 10, timeInSecs = 10 };
             levels[1] = new Level() { colours = 2, dimension = 4, points = 20, timeInSecs = 28 };
-            levels[2] = new Level() { colours = 4, dimension = 4, points = 30, timeInSecs = 50 };
-            levels[3] = new Level() { colours = 8, dimension = 4, points = 40, timeInSecs = 75 };
+            levels[2] = new Level() { colours = 4, dimension = 4, points = 30, timeInSecs = 40 };
+            levels[3] = new Level() { colours = 8, dimension = 4, points = 40, timeInSecs = 55 };
         }
 
         public Level GetLevel(int level)

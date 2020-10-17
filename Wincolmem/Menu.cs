@@ -102,6 +102,7 @@ namespace Wincolmem
             score = 0;
             GameEnded = false;
             StartLevel(0);
+            PlayInGame();
         }
 
         private void QuitButton_Click(object sender, EventArgs e)
@@ -242,10 +243,9 @@ namespace Wincolmem
                 levelComplete();
         }
 
-        // TODO inside
         private void levelComplete()
         {
-            if (currentLevel < 0)// game.TotalNumberOfLevels() -1)  //TODO: remove this comment
+            if (currentLevel < game.TotalNumberOfLevels() -1)
             {
                 currentLevel = currentLevel + 1;
                 onGameTimer.Stop();
@@ -283,6 +283,8 @@ namespace Wincolmem
             pictureBox.Top = 1;
             pictureBox.Name = "EndPicture";
 
+            PlayEndGame();
+
             this.Controls.Add(pictureBox);
         }
 
@@ -293,7 +295,7 @@ namespace Wincolmem
                 if (ScreenTimerHold >= 0) //Display ending screen for 5 sec.
                 {
                     ScreenTimerHold++;
-                    if (ScreenTimerHold == 5)
+                    if (ScreenTimerHold == 10)
                     {
                         ScreenTimerHold = -1;
                         CloseGame();
@@ -400,6 +402,8 @@ namespace Wincolmem
             this.Controls.Add(label);
             label.BringToFront();
             pictureBox.SendToBack();
+
+            PlayGameOver();
         }
 
         private void RemoveEndScreen()
@@ -484,6 +488,7 @@ namespace Wincolmem
             HiScoresButton.Show();
             QuitButton.Show();
             mainMenuTimer.Start();
+            PlayHome();
         }
     
         private void ShowHighScores()
@@ -536,10 +541,30 @@ namespace Wincolmem
 
         private void PlayHome()
         {
-
             System.IO.Stream str = Properties.Resources.home;
             music = new SoundPlayer(str);
             music.PlayLooping();
+        }
+
+        private void PlayInGame()
+        {
+            System.IO.Stream str = Properties.Resources.inGameMusic;
+            music = new SoundPlayer(str);
+            music.PlayLooping();
+        }
+
+        private void PlayEndGame()
+        {
+            System.IO.Stream str = Properties.Resources.endGameMusic;
+            music = new SoundPlayer(str);
+            music.Play();
+        }
+
+        private void PlayGameOver()
+        {
+            System.IO.Stream str = Properties.Resources.gameOverMusic;
+            music = new SoundPlayer(str);
+            music.Play();
         }
 
         public void PlayFX(System.IO.Stream resource)
