@@ -27,6 +27,7 @@ namespace Wincolmem
             if (form.MoreClicks() && !IamClicked)
             {
                 base.OnClick(e);
+                form.PlayFX(Properties.Resources.click);
                 this.BackColor = cardColour;
                 this.Image = null;
                 form.NotifyCardClicked(this);
@@ -43,11 +44,13 @@ namespace Wincolmem
         public void Matched()
         {
             this.Image = Properties.Resources.okT;
+            form.PlayFX(Properties.Resources.success);
         }
 
         public void NoMatched()
         {
             this.Image = Properties.Resources.failT;
+            form.PlayFX(Properties.Resources.failure);
         }
 
     }

@@ -3,6 +3,9 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Media;
+using SharpDX.XAudio2;
+using SharpDX.Multimedia;
 
 namespace Wincolmem
 {
@@ -29,7 +32,9 @@ namespace Wincolmem
         private bool GameEnded = false;
         private bool HiScoreScreenActivated = false;
         private HighScores highscorelist;
-        private System.Media.SoundPlayer player;
+        private SoundPlayer music;
+        private XAudio2 xaudio2;
+        private MasteringVoice masteringVoice;
 
         public Menu()
         {
@@ -38,6 +43,8 @@ namespace Wincolmem
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            xaudio2 = new XAudio2();
+            masteringVoice = new MasteringVoice(xaudio2);
             mainMenuAnimation = true;
             mainMenuTimer.Interval = 800;
             onGameTimer.Interval = 1000;
@@ -89,6 +96,7 @@ namespace Wincolmem
 
         private void StartButton_Click(object sender, EventArgs e)
         {
+            PlayFX(Properties.Resources.click);
             HideMainMenu();
             game = new ColMem();
             score = 0;
@@ -98,6 +106,7 @@ namespace Wincolmem
 
         private void QuitButton_Click(object sender, EventArgs e)
         {
+            PlayFX(Properties.Resources.click);
             Application.Exit();
         }
 
@@ -508,6 +517,7 @@ namespace Wincolmem
 
         private void HiScoresButton_Click(object sender, EventArgs e)
         {
+            PlayFX(Properties.Resources.click);
             if (HiScoreScreenActivated)
                 ShowMainMenu();
             else
@@ -526,9 +536,29 @@ namespace Wincolmem
 
         private void PlayHome()
         {
+
             System.IO.Stream str = Properties.Resources.home;
-            player = new System.Media.SoundPlayer(str);
-            player.PlayLooping();
+            music = new SoundPlayer(str);
+            music.PlayLooping();
+        }
+
+        public void PlayFX(System.IO.Stream resource)
+        {
+            
+            var stream = new SoundStream(resource);
+            var waveFormat = stream.Format;
+            var buffer = new AudioBuffer
+            {
+                Stream = stream.ToDataStream(),
+                AudioBytes = (int)stream.Length,
+                Flags = BufferFlags.EndOfStream
+            };
+            stream.Close();
+
+            var sourceVoice = new SourceVoice(xaudio2, waveFormat, true);
+            sourceVoice.SubmitSourceBuffer(buffer, stream.DecodedPacketsInfo);
+            sourceVoice.Start();
+
         }
     }
 
@@ -558,4 +588,5 @@ namespace Wincolmem
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
     }
+
 }
