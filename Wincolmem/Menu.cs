@@ -15,18 +15,17 @@ namespace Wincolmem
         private static int width = 337;
         private static Card card1clicked = null;
         private static Card card2clicked = null;
-        private bool removeCards = false;
+        private bool markForRemoval = false;
         private bool showResultBeforeRemove = false;
         private bool wrongChoice = false;
-        private bool flipCards = false;
+        private bool markForFlipping = false;
         private static int levelScore;
         private int cardsLeft = -1;
         private int currentLevel = 0;
         private ColMem game;
         private int levelSecondsLeft;
         private int levelDimension;
-        private int GameOverScreenTimerHold = -1;
-        private int EndGameScreenTimerHold = -1;
+        private int ScreenTimerHold = -1;
         private bool GameEnded = false;
         private bool HiScoreScreenActivated = false;
         private HighScores highscorelist;
@@ -212,7 +211,7 @@ namespace Wincolmem
             if (card1clicked.BackColor == card2clicked.BackColor)
             {
                 updateScore(true);
-                removeCards = true;
+                markForRemoval = true;
             }
             else
             {
@@ -232,6 +231,7 @@ namespace Wincolmem
                 levelComplete();
         }
 
+        // TODO inside
         private void levelComplete()
         {
             if (currentLevel < 0)// game.TotalNumberOfLevels() -1)  //TODO: remove this comment
@@ -246,11 +246,16 @@ namespace Wincolmem
 
         private void gameEnding()
         {
+            cleanBoard();
+            ShowEndGameScreeen();
+        }
+
+        private void cleanBoard()
+        {
             GameEnded = true;
             game = null;
             GetRidOfInGameStuff();
-            EndGameScreenTimerHold = 0;
-            ShowEndGameScreeen();
+            ScreenTimerHold = 0;
         }
 
         private void ShowEndGameScreeen()
@@ -265,22 +270,26 @@ namespace Wincolmem
 
             pictureBox.Left = 1;
             pictureBox.Top = 1;
-            pictureBox.Name = "GameEndPicture";
+            pictureBox.Name = "EndPicture";
 
             this.Controls.Add(pictureBox);
         }
 
-        private void RemoveEndGameScreen()
-        {
-            PictureBox pictureBox = (PictureBox)this.Controls.Find("GameEndPicture", true).FirstOrDefault();
-            pictureBox.Dispose();
-            pictureBox = null;
-        }
-
         private void onGameTimer_Tick(object sender, System.EventArgs e)
-        {
-            
-            if (!GameEnded)
+        {            
+            if (GameEnded)
+            {
+                if (ScreenTimerHold >= 0) //Display ending screen for 5 sec.
+                {
+                    ScreenTimerHold++;
+                    if (ScreenTimerHold == 5)
+                    {
+                        ScreenTimerHold = -1;
+                        CloseGame();
+                    }
+                }
+            }
+            else
             {
                 levelSecondsLeft--;
 
@@ -289,87 +298,67 @@ namespace Wincolmem
                 else
                 {
                     UpdateTimeLabel();
-                    if (removeCards)
-                    {
-                        if (showResultBeforeRemove)
-                        {
-                            removeMatchedCards();
-                            removeCards = false;
-                            showResultBeforeRemove = false;
-                        }
-                        else
-                        {
-                            card1clicked.Matched();
-                            card2clicked.Matched();
-                            showResultBeforeRemove = true;
-                        }
-                    }
 
-                    if (wrongChoice)
-                    {
-                        if (flipCards)
-                        {
-                            card1clicked.FlipCard();
-                            card2clicked.FlipCard();
-                            wrongChoice = false;
-                            flipCards = false;
-                            removeCards = false;
-                            card1clicked = null;
-                            card2clicked = null;
-                        }
-                        else
-                        {
-                            card1clicked.NoMatched();
-                            card2clicked.NoMatched();
-                            flipCards = true;
-                        }
-                    }
+                    if (markForRemoval)
+                        RemoveCards();
+
+                    if (wrongChoice)                    
+                        FlipCards();                    
                 }
             }
+        }
 
+        private void CloseGame()
+        {
+            onGameTimer.Stop();
+            onGameTimer.Enabled = false;
+            SaveIfHighScore();
+            RemoveEndScreen();
+            ResizeFormForMainMenu();
+            ShowMainMenu();
+        }
+
+        private void FlipCards()
+        {
+            if (markForFlipping)
+            {
+                card1clicked.FlipCard();
+                card2clicked.FlipCard();
+                wrongChoice = false;
+                markForFlipping = false;
+                markForRemoval = false;
+                card1clicked = null;
+                card2clicked = null;
+            }
             else
             {
-                if (GameOverScreenTimerHold >= 0)
-                {
-                    GameOverScreenTimerHold++;
-                    if (GameOverScreenTimerHold == 5)
-                    {
-                        GameOverScreenTimerHold = -1;                        
-                        onGameTimer.Stop();
-                        onGameTimer.Enabled = false;
-                        SaveIfHighScore();
-                        RemoveGameOverScreen();
-                        ResizeFormForMainMenu();
-                        ShowMainMenu();
-                    }
-                }
+                card1clicked.NoMatched();
+                card2clicked.NoMatched();
+                markForFlipping = true;
+            }
+        }
 
-                if (EndGameScreenTimerHold >= 0)
-                {
-                    EndGameScreenTimerHold++;
-                    if (EndGameScreenTimerHold == 5)
-                    {
-                        EndGameScreenTimerHold = -1;                        
-                        onGameTimer.Stop();
-                        onGameTimer.Enabled = false;                        
-                        SaveIfHighScore();
-                        RemoveEndGameScreen();
-                        ResizeFormForMainMenu();
-                        ShowMainMenu();
-                    }
-                }
-                
+        private void RemoveCards()
+        {
+            if (showResultBeforeRemove)
+            {
+                removeMatchedCards();
+                markForRemoval = false;
+                showResultBeforeRemove = false;
+            }
+            else
+            {
+                card1clicked.Matched();
+                card2clicked.Matched();
+                showResultBeforeRemove = true;
             }
         }
 
         private void gameOver()
         {
-            GameEnded = true;
-            game = null;
-            GetRidOfInGameStuff();
-            GameOverScreenTimerHold = 0;
+            cleanBoard();
             ShowGameOverScreeen();
-        }           
+        }
 
         private void ShowGameOverScreeen()
         {
@@ -383,7 +372,7 @@ namespace Wincolmem
             
             pictureBox.Left = 1;
             pictureBox.Top = 1;
-            pictureBox.Name = "GameOverPicture";
+            pictureBox.Name = "EndPicture";
 
             Label label = new Label();
             label.Text = "GAME OVER";
@@ -402,13 +391,15 @@ namespace Wincolmem
             pictureBox.SendToBack();
         }
 
-        private void RemoveGameOverScreen()
+        private void RemoveEndScreen()
         {
             Label label = (Label)this.Controls.Find("GameOverLabel" , true).FirstOrDefault();
-            label.Dispose();
-            label = null;
-
-            PictureBox pictureBox = (PictureBox)this.Controls.Find("GameOverPicture", true).FirstOrDefault();
+            if (label != null)
+            {
+                label.Dispose();
+                label = null;
+            }
+            PictureBox pictureBox = (PictureBox)this.Controls.Find("EndPicture", true).FirstOrDefault();
             pictureBox.Dispose();
             pictureBox = null;
         }
@@ -532,6 +523,7 @@ namespace Wincolmem
         }
     }
 
+    //Dialog window to insert high score
     //borrowed from stack overflow
     public static class Prompt
     {
