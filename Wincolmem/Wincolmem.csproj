@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\backSide.JPG" />
+    <None Include="Resources\home.wav" />
     <None Include="Resources\gameEnd.png" />
     <None Include="Resources\gameOver.gif" />
     <None Include="Resources\failT.png" />

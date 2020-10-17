@@ -29,6 +29,7 @@ namespace Wincolmem
         private bool GameEnded = false;
         private bool HiScoreScreenActivated = false;
         private HighScores highscorelist;
+        private System.Media.SoundPlayer player;
 
         public Menu()
         {
@@ -42,6 +43,7 @@ namespace Wincolmem
             onGameTimer.Interval = 1000;
             highscorelist = new HighScores();
             mainMenuTimer.Start();
+            PlayHome();
         }
 
         private void mainMenuTimer_Tick(object sender, System.EventArgs e)
@@ -520,6 +522,13 @@ namespace Wincolmem
                 highscorelist.AddHighScore(new HighScore { points = score, name = nameInserted });
                 highscorelist.SaveHighScores();
             }
+        }
+
+        private void PlayHome()
+        {
+            System.IO.Stream str = Properties.Resources.home;
+            player = new System.Media.SoundPlayer(str);
+            player.PlayLooping();
         }
     }
 
