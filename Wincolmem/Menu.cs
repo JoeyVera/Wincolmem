@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Media;
 using SharpDX.XAudio2;
 using SharpDX.Multimedia;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
 
 namespace Wincolmem
 {
@@ -35,6 +37,7 @@ namespace Wincolmem
         private SoundPlayer music;
         private XAudio2 xaudio2;
         private MasteringVoice masteringVoice;
+        PrivateFontCollection pfc;
 
         public Menu()
         {
@@ -43,6 +46,7 @@ namespace Wincolmem
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            CustomFont();
             xaudio2 = new XAudio2();
             masteringVoice = new MasteringVoice(xaudio2);
             mainMenuAnimation = true;
@@ -138,7 +142,6 @@ namespace Wincolmem
             levelLabel.Text = "LEVEL " + level.ToString();
             levelLabel.Top = 1;
             levelLabel.Left = 1;
-            levelLabel.Font = new Font("Debussy", 16);
             levelLabel.ForeColor = Color.Black;
             levelLabel.AutoSize = true;
             levelLabel.Visible = true;
@@ -151,7 +154,6 @@ namespace Wincolmem
             scoreLabel.Top = 1;
             scoreLabel.Left = width - 30 - (score.ToString().Length * 16); //16 is the font size
             scoreLabel.TextAlign = ContentAlignment.TopRight;
-            scoreLabel.Font = new Font("Debussy", 16);
             scoreLabel.ForeColor = Color.Black;
             scoreLabel.AutoSize = true;
             scoreLabel.Visible = true;
@@ -391,7 +393,8 @@ namespace Wincolmem
             label.Text = "GAME OVER";
             label.Top = 20;
             label.Left = 30;
-            label.Font = new Font("Debussy", 50);
+            label.Font = new Font(pfc.Families[0], 50);
+            label.UseCompatibleTextRendering = true;
             label.ForeColor = Color.Black;
             label.AutoSize = true;
             label.Visible = true;
@@ -476,6 +479,8 @@ namespace Wincolmem
             label2.Text = "o";
             label5.Text = "u";
             MemoryLabel.Text = "Memory";
+            MemoryLabel.Left = 38;
+            MemoryLabel.Top = 88;
             label1.Show();
             label2.Show();
             label3.Show();
@@ -584,6 +589,45 @@ namespace Wincolmem
             sourceVoice.SubmitSourceBuffer(buffer, stream.DecodedPacketsInfo);
             sourceVoice.Start();
 
+        }
+
+        //borrowed from stackoverflow
+        private void CustomFont()
+        {
+            //Create your private font collection object.
+            pfc = new PrivateFontCollection();
+
+            //Select your font from the resources.
+            //My font here is "Digireu.ttf"
+            int fontLength = Properties.Resources.debussy.Length;
+
+            // create a buffer to read in to
+            byte[] fontdata = Properties.Resources.debussy;
+
+            // create an unsafe memory block for the font data
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+
+            // copy the bytes to the unsafe memory block
+            Marshal.Copy(fontdata, 0, data, fontLength);
+
+            // pass the font to the font collection
+            pfc.AddMemoryFont(data, fontLength);
+
+            MemoryLabel.Font = new Font(pfc.Families[0], 39.75F);
+            StartButton.Font = new Font(pfc.Families[0], 15F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            HiScoresButton.Font = new Font(pfc.Families[0], 15F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            QuitButton.Font = new Font(pfc.Families[0], 15F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            label1.Font = new Font(pfc.Families[0], 39.75F,FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            label3.Font = new Font(pfc.Families[0], 39.75F);
+            label4.Font = new Font(pfc.Families[0], 39.75F);
+            label5.Font = new Font(pfc.Families[0], 39.75F);
+            label6.Font = new Font(pfc.Families[0], 39.75F);
+            timeLabel.Font = new Font(pfc.Families[0], 15F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            levelLabel.Font = new Font(pfc.Families[0], 15F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            scoreLabel.Font = new Font(pfc.Families[0], 15F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            label2.Font = new Font(pfc.Families[0], 39.75F);
+            pointsText.Font = new Font(pfc.Families[0], 12F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));           
+            nameText.Font = new Font(pfc.Families[0], 12F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
         }
     }
 
