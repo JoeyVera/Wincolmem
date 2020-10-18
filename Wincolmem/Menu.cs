@@ -101,6 +101,7 @@ namespace Wincolmem
         private void StartButton_Click(object sender, EventArgs e)
         {
             PlayFX(Properties.Resources.click);
+            currentLevel = 0;
             HideMainMenu();
             game = new ColMem();
             score = 0;
@@ -117,6 +118,7 @@ namespace Wincolmem
 
         private void StartLevel(int level)
         {
+            CleanPreviousLevelRemainingStuff();
             levelDimension = game.GetLevel(level).dimension;
             cardsLeft = levelDimension * levelDimension;
             levelScore = game.GetLevel(level).points;
@@ -128,6 +130,23 @@ namespace Wincolmem
             placeCards(game.GetLevelMap(level));
             onGameTimer.Enabled = true;
             onGameTimer.Start();
+        }
+
+        private void CleanPreviousLevelRemainingStuff()
+        {
+            cardsLeft = 0;
+            markForRemoval = false;
+            markForFlipping = false;
+            if (card1clicked != null)
+            {
+                card1clicked.Dispose();
+                card1clicked = null;
+            }
+            if (card2clicked != null)
+            {
+                card2clicked.Dispose();
+                card2clicked = null;
+            }
         }
 
         private void ResizeFormForLevel()
@@ -294,7 +313,7 @@ namespace Wincolmem
         {            
             if (GameEnded)
             {
-                if (ScreenTimerHold >= 0) //Display ending screen for 5 sec.
+                if (ScreenTimerHold >= 0) //Display ending screen for 10 sec.
                 {
                     ScreenTimerHold++;
                     if (ScreenTimerHold == 10)
@@ -471,6 +490,8 @@ namespace Wincolmem
 
         private void ShowMainMenu()
         {
+            this.Width = 337;
+            this.Height = 493;
             HiScoreScreenActivated = false;
             pointsText.Visible = false;
             nameText.Visible = false;
